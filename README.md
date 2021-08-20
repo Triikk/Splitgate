@@ -4,3 +4,8 @@ A very simple and easy to use API client for the [Tracker.gg's Splitgate web API
 ## Features
 Search player by platform and username
 Get player's profile stats
+
+## Tracker.gg's links
+* [Getting started](https://tracker.gg/developers/docs/getting-started)
+* [Authentication](https://tracker.gg/developers/docs/authentication)
+* [Data ingest](https://tracker.gg/developers/docs/data-ingest)
