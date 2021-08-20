@@ -2,7 +2,7 @@
 A small API wrapper for Tracker.gg's Splitgate web API
 
 This module only provides methods for searching a Splitgate player and getting a Splitgate
-player's profile stats, since these are the only two methods available at the moment.
+player's profile stats, since these are the only two methods available in the Tracker.gg's API at the moment.
 
 Documentation: https://tracker.gg/developers/docs/titles/splitgate
 """
@@ -15,7 +15,7 @@ from os import getenv
 
 class Client():
 
-    def __init__(self, API_KEY):
+    def __init__(self, API_KEY: str):
         self.API_KEY = API_KEY
         self.headers = self.get_headers()
 
@@ -61,7 +61,3 @@ class Client():
             return response.json()
         else:
             return response.status_code
-
-# API_KEY = getenv("API_KEY")
-# client = Client(API_KEY)
-# print(client.get_player_stats("psn", "GlobiSpace"))
