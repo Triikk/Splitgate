@@ -5,8 +5,6 @@ player's profile stats, since these are the only two methods available in the Tr
 Documentation: https://tracker.gg/developers/docs/titles/splitgate
 """
 
-__author__ = "Triikk"
-
 import requests
 import urllib
 from os import getenv
@@ -72,7 +70,7 @@ class Client():
         else:
             return response.status_code
 
-        def get_platform_info(response: dict):
+        def get_platform_info(self, response: dict):
             """
             Return the user's platform informations
 
@@ -80,54 +78,60 @@ class Client():
 
             :rtype: dict
             """
+            
+            platform_info = response["data"]["platformInfo"]
             return {
-                "plaftormSlug": response["data"]["platformInfo"]["plaftormSlug"],
-                "platformUserId": response["data"]["platformInfo"]["plaftormUserId"],
-                "plaftormUserHandle": response["data"]["platformInfo"]["plaftormUserHandle"],
-                "platformUserIdentifier": response["data"]["platformInfo"]["platformUserIdentifier"],
-                "avatarUrl": response["data"]["platformInfo"]["avatarUrl"],
-                "additionalParameters": response["data"]["platformInfo"]["additionalParameters"]
+                "plaftormSlug": platform_info["plaftormSlug"],
+                "platformUserId": platform_info["plaftormUserId"],
+                "plaftormUserHandle": platform_info["plaftormUserHandle"],
+                "platformUserIdentifier": platform_info["platformUserIdentifier"],
+                "avatarUrl": platform_info["avatarUrl"],
+                "additionalParameters": platform_info["additionalParameters"]
             }
 
-        def get_profile_info(response: dict):
-            """
-            Return the user's profile informations 
+    def get_user_info(self, response: dict):
+        """
+        Return the user's profile informations 
 
-            :param response: The dict returned by `get_player_stats()`
+        :param response: The dict returned by `get_player_stats()`
 
-            :rtype: dict
-            """
-            return {
-                "userId": response["data"]["userInfo"]["userId"],
-                "isPremium": response["data"]["userInfo"]["isPremium"],
-                "isVerified": response["data"]["userInfo"]["isVerified"],
-                "isInfluencer": response["data"]["userInfo"]["isInfluencer"],
-                "isPartner": response["data"]["userInfo"]["isPartner"],
-                "countryCode": response["data"]["userInfo"]["countryCode"],
-                "customAvatarUrl": response["data"]["userInfo"]["customAvatarUrl"],
-                "customHeroUrl": response["data"]["userInfo"]["customHeroUrl"],
-                "socialAccounts": [x for x in response["data"]["userInfo"]["socialAccounts"]], # contains platformSlug, platformUserHandle, platformUserIdentifier
-                "pageviews": response["data"]["userInfo"]["pageviews"],
-                "isSuspicious": response["data"]["userInfo"]["isSuspicious"]
-            }
+        :rtype: dict
+        """
 
-        def get_stat(response: dict, stat: str):
-            """
-            Return the user statistic
+        user_info = response["data"]["userInfo"]
+        return {
+            "userId": user_info["userId"],
+            "isPremium": user_info["isPremium"],
+            "isVerified": user_info["isVerified"],
+            "isInfluencer": user_info["isInfluencer"],
+            "isPartner": user_info["isPartner"],
+            "countryCode": user_info["countryCode"],
+            "customAvatarUrl": user_info["customAvatarUrl"],
+            "customHeroUrl": user_info["customHeroUrl"],
+            "socialAccounts": [x for x in user_info["socialAccounts"]], # platformSlug, platformUserHandle, platformUserIdentifier
+            "pageviews": user_info["pageviews"],
+            "isSuspicious": user_info["isSuspicious"]
+        }
 
-            :param response: The dict returned by `get_player_stats()`
-            :param stat: The stat you are looking for (see the documentation for more informations)
+    def get_user_stat(self, response: dict, stat: str):
+        """
+        Return the user statistic
 
-            :rtype: dict
-            """
-            return {
-                "rank": response["data"]["segments"][0]["stats"][stat]["rank"],
-                "percentile": response["data"]["segments"][0]["stats"][stat]["percentile"],
-                "displayName": response["data"]["segments"][0]["stats"][stat]["displayName"],
-                "displayCategory": response["data"]["segments"][0]["stats"][stat]["displayCategory"],
-                "category": response["data"]["segments"][0]["stats"][stat]["category"],
-                "metadata": response["data"]["segments"][0]["stats"][stat]["metadata"], # can contain extra data such as an image url
-                "value": response["data"]["segments"][0]["stats"][stat]["value"],
-                "displayValue": response["data"]["segments"][0]["stats"][stat]["displayValue"],
-                "displayType": response["data"]["segments"][0]["stats"][stat]["displayType"]
-            }
+        :param response: The dict returned by `get_player_stats()`
+        :param stat: The stat you are looking for (see the documentation for more informations)
+
+        :rtype: dict
+        """
+
+        statistic = response["data"]["segments"][0]["stats"][stat]
+        return {
+            "rank": statistic["rank"],
+            "percentile": statistic["percentile"],
+            "displayName": statistic["displayName"],
+            "displayCategory": statistic["displayCategory"],
+            "category": statistic["category"],
+            "metadata": statistic["metadata"], # can contain extra data such as an image url
+            "value": statistic["value"],
+            "displayValue": statistic["displayValue"],
+            "displayType": statistic["displayType"]
+        }
